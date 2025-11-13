@@ -1,5 +1,6 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from flask_login import UserMixin
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -63,6 +64,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 
+
+
 # ---------- ROUTES ----------
 @app.route('/')
 def index():
@@ -83,7 +86,7 @@ def login():
 def menu():
     return render_template('menu.html')
 
-@app.route('/api/menu')
+@app.route('/api/menu', methods=['GET', 'POST'])
 def get_menu():
     categories = Category.query.all()
     menu = []
@@ -96,6 +99,7 @@ def get_menu():
             "price": float(i.price),
             "is_drink": i.is_drink
         } for i in cat.items]
+
 
         menu.append({
             "category": cat.name,
@@ -121,24 +125,27 @@ def get_categories():
 
 @app.route('/api/menu/<category_name>')
 def get_menu_by_category(category_name):
-    # Find the category by name
-    category = Category.query.filter_by(name=category_name).first()
-    
+    # Make search case-insensitive
+    category = Category.query.filter(func.lower(Category.name) == category_name.lower()).first()
+
     if not category:
         return jsonify({"error": "Category not found"}), 404
-    
+
+    # Fetch all items for that category
     items = MenuItem.query.filter_by(category_id=category.category_id).all()
-    items_list = []
-    
-    for item in items:
-        items_list.append({
+
+    # Return all matching items
+    return jsonify([
+        {
             "id": item.item_id,
             "name": item.name,
             "description": item.description,
             "price": float(item.price),
             "category": category.name,
             "is_drink": item.is_drink
-        })
+        }
+        for item in items
+    ])
     
     return jsonify(items_list)
 

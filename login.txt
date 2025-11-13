@@ -1,0 +1,38 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ichiraku — Login</title>
+</head>
+<body>
+  <header>
+    <h1>Login</h1>
+    <nav>
+      <a href="{{ url_for('index')}}">Home</a> |  <a href="{{ url_for('menu') }}">Menu</a>
+    </nav>
+  </header>
+  <main>
+    <form id="login-form">
+      <label for="email">Email</label><br>
+      <input type="email" id="email" name="email" required><br><br>
+
+      <label for="password">Password</label><br>
+      <input type="password" id="password" name="password" required><br><br>
+
+      <button type="submit">Log In</button>
+    </form>
+
+    <p id="login-msg" aria-live="polite"></p>
+  </main>
+
+  <script>
+    // Minimal JS just to prevent form submission refreshing the page for now
+    document.getElementById('login-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      document.getElementById('login-msg').textContent = 'Logging in... (we will implement real logic later)';
+    });
+  </script>
+</body>
+</html>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -23,11 +22,15 @@
       </nav>
     </header>
 
-    <main>
+  <main>
       <section id="hero">
         <h1>Ichiraku</h1>
         <p class="tagline">Real flavors. Real people. Real food.</p>
-        <a href="{{ url_for('menu', filename='templates/menu.html') }}" class="cta">View Menu</a>
+        
+        <div class="cta-container">
+          <a href="{{ url_for('menu') }}" class="cta">Dine in</a>
+<a href="{{ url_for('login') }}" class="cta">Order</a>
+        </div>
       </section>
 
       <section id="about">

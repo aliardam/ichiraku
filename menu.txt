@@ -1,29 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Menu - Ichiraku Restaurant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  </head>
+  <body>
+    <header>
+      <h1>Our Menu</h1>
+    </header>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
-  <title>Ichiraku — Menu</title>
-</head>
+    <main id="menu-container">
+      <!-- Categories Section -->
+      <section id="categories">
+        <h2>Categories</h2>
+        <div class="category-grid">
+          <div class="category" data-category="sushi">
+            <img src="{{ url_for('static', filename='images/sushi.png') }}" alt="Sushi" />
+            <h3>Sushis</h3>
+          </div>
+          <div class="category" data-category="Noodles">
+            <img src="{{ url_for('static', filename='images/Noodles.png') }}" alt="Noodles" />
+            <h3>Noodles</h3>
+          </div>
+          <div class="category" data-category="drinks">
+            <img src="{{ url_for('static', filename='images/drinks.png') }}" alt="Drinks" />
+            <h3>Drinks</h3>
+          </div>
+        </div>
+      </section>
 
-<body>
-  <header>
-    <h1>Ichiraku — Menu</h1>
-    <nav>
-      <a href="/">Home</a> |
-      <a href="/menu">Menu</a> |
-      <a href="/login">Login</a>
-    </nav>
-  </header>
-  <main id="menu-container"></main>
-  <footer>
-    <p><a href="index.html">Back to Home</a></p>
-  </footer>
+      <!-- Items Section -->
+      <section id="items" class="hidden">
+        <button id="back-btn">← Back to Categories</button>
+        <h2 id="category-title"></h2>
+        <div class="item-grid" id="item-list">
+          <!-- Items will appear here -->
+        </div>
+      </section>
+    </main>
 
-  <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
-
-</body>
-
+    <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+  </body>
 </html>
