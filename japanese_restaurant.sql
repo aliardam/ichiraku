@@ -23,7 +23,7 @@ SET @@SESSION.SQL_LOG_BIN= 0;
 -- GTID state at the beginning of the backup 
 --
 
-SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '166cb258-b2aa-11f0-b758-74f880997fb1:1-61';
+SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '166cb258-b2aa-11f0-b758-74f880997fb1:1-76';
 
 --
 -- Table structure for table `Categories`
@@ -142,6 +142,7 @@ CREATE TABLE `Menu_Items` (
   `price` decimal(6,2) NOT NULL,
   `category_id` int NOT NULL,
   `is_drink` tinyint(1) DEFAULT '0',
+  `image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`item_id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `menu_items_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `Categories` (`category_id`)
@@ -154,7 +155,7 @@ CREATE TABLE `Menu_Items` (
 
 LOCK TABLES `Menu_Items` WRITE;
 /*!40000 ALTER TABLE `Menu_Items` DISABLE KEYS */;
-INSERT INTO `Menu_Items` VALUES (1,'Edamame','Steamed young soybeans with sea salt',5.50,1,0),(2,'Gyoza','Pan-fried dumplings filled with pork and vegetables',6.90,1,0),(3,'Agedashi Tofu','Crispy tofu served in light soy broth',7.50,1,0),(4,'Chicken Teriyaki','Grilled chicken glazed with teriyaki sauce, served with rice',14.90,2,0),(5,'Salmon Donburi','Fresh salmon slices served over seasoned rice',16.50,2,0),(6,'Ramen','Japanese noodle soup with pork, egg, and vegetables',12.90,2,0),(7,'Mochi Ice Cream','Soft rice cakes filled with ice cream',6.00,3,0),(8,'Matcha Cheesecake','Cheesecake flavored with Japanese green tea',7.50,3,0),(9,'Dorayaki','Sweet pancakes filled with red bean paste',5.90,3,0),(10,'Green Tea','Traditional Japanese hot tea',2.50,4,1),(11,'Ramune','Japanese carbonated soft drink',3.00,4,1),(12,'Matcha Latte','Creamy milk drink with matcha powder',4.50,4,1),(13,'California Roll','Sushi roll with crab, avocado, cucumber, and rice wrapped in seaweed',9.90,2,0),(14,'Vegetable Sushi Roll','Fresh sushi roll with cucumber, avocado, and tofu',8.50,2,0);
+INSERT INTO `Menu_Items` VALUES (1,'Edamame','Steamed young soybeans with sea salt',5.50,1,0,'edamame.jpg'),(2,'Gyoza','Pan-fried dumplings filled with pork and vegetables',6.90,1,0,'Gyoza.jpeg'),(3,'Agedashi Tofu','Crispy tofu served in light soy broth',7.50,1,0,'agedashi-tofu.jpg'),(4,'Chicken Teriyaki','Grilled chicken glazed with teriyaki sauce, served with rice',14.90,2,0,'chicken-teriyaki.jpg'),(5,'Salmon Donburi','Fresh salmon slices served over seasoned rice',16.50,2,0,'salmon-donburi.jpg'),(6,'Ramen','Japanese noodle soup with pork, egg, and vegetables',12.90,2,0,'ramen.jpg'),(7,'Mochi Ice Cream','Soft rice cakes filled with ice cream',6.00,3,0,'mochi-ice-cream.jpg'),(8,'Matcha Cheesecake','Cheesecake flavored with Japanese green tea',7.50,3,0,'Matcha-cheesecake.jpg'),(9,'Dorayaki','Sweet pancakes filled with red bean paste',5.90,3,0,'dorayaki.jpg'),(10,'Green Tea','Traditional Japanese hot tea',2.50,4,1,'green-tea.jpg'),(11,'Ramune','Japanese carbonated soft drink',3.00,4,1,'ramune.jpg'),(12,'Matcha Latte','Creamy milk drink with matcha powder',4.50,4,1,'Matcha-Latte.jpg'),(13,'California Roll','Sushi roll with crab, avocado, cucumber, and rice wrapped in seaweed',9.90,2,0,'California-roll.jpg'),(14,'Vegetable Sushi Roll','Fresh sushi roll with cucumber, avocado, and tofu',8.50,2,0,'Vegetable-Sushi-Roll.jpg');
 /*!40000 ALTER TABLE `Menu_Items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -300,4 +301,4 @@ SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-13  9:45:56
+-- Dump completed on 2025-11-13 11:37:55
