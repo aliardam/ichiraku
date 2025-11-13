@@ -1,38 +1,47 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ichiraku — Login</title>
-</head>
-<body>
-  <header>
-    <h1>Login</h1>
-    <nav>
-      <a href="{{ url_for('index')}}">Home</a> |  <a href="{{ url_for('menu') }}">Menu</a>
-    </nav>
-  </header>
-  <main>
-    <form id="login-form">
-      <label for="email">Email</label><br>
-      <input type="email" id="email" name="email" required><br><br>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login or Register | Restaurant App</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="auth-container">
+      <div class="auth-box">
+        <h1 id="formTitle">Login</h1>
+        <p id="formSubtitle">Welcome back! Please sign in.</p>
 
-      <label for="password">Password</label><br>
-      <input type="password" id="password" name="password" required><br><br>
+        <form id="authForm">
+          <div class="input-group">
+            <label for="identifier">Email or Mobile Number</label>
+            <input type="text" id="identifier" name="identifier" required />
+          </div>
 
-      <button type="submit">Log In</button>
-    </form>
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+          </div>
 
-    <p id="login-msg" aria-live="polite"></p>
-  </main>
+          <div class="input-group" id="registerFields" style="display: none">
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+            />
+          </div>
 
-  <script>
-    // Minimal JS just to prevent form submission refreshing the page for now
-    document.getElementById('login-form').addEventListener('submit', function(e){
-      e.preventDefault();
-      document.getElementById('login-msg').textContent = 'Logging in... (we will implement real logic later)';
-    });
-  </script>
-</body>
+          <button type="submit" id="submitBtn">Login</button>
+        </form>
+
+        <p class="toggle-link">
+          Don’t have an account? <a href="#" id="toggleForm">Register here</a>
+        </p>
+        <p id="message"></p>
+      </div>
+    </div>
+
+    <script src="login.js"></script>
+  </body>
 </html>
