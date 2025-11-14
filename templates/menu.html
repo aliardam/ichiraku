@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <title>Menu - Ichiraku Restaurant</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
   </head>
   <body>
     <header>
@@ -16,19 +19,31 @@
         <h2>Categories</h2>
         <div class="category-grid">
           <div class="category" data-category="main dishes">
-            <img src="{{ url_for('static', filename='images/maindishes.png') }}" alt="Main Dishes" />
+            <img
+              src="{{ url_for('static', filename='images/maindishes.png') }}"
+              alt="Main Dishes"
+            />
             <h3>Main Dishes</h3>
           </div>
           <div class="category" data-category="appetizers">
-            <img src="{{ url_for('static', filename='images/appetizers.png') }}" alt="Appetizers" />
+            <img
+              src="{{ url_for('static', filename='images/appetizers.png') }}"
+              alt="Appetizers"
+            />
             <h3>Appetizers</h3>
           </div>
-          <div class="category" data-category="desserts">
-            <img src="{{ url_for('static', filename='images/desserts.png') }}" alt="Desserts" />
+          <div class="category desserts-cat" data-category="desserts">
+            <img
+              src="{{ url_for('static', filename='images/desserts.png') }}"
+              alt="Desserts"
+            />
             <h3>Desserts</h3>
           </div>
           <div class="category" data-category="drinks">
-            <img src="{{ url_for('static', filename='images/drinks.png') }}" alt="Drinks" />
+            <img
+              src="{{ url_for('static', filename='images/drinks.png') }}"
+              alt="Drinks"
+            />
             <h3>Drinks</h3>
           </div>
         </div>

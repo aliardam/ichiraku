@@ -185,6 +185,11 @@ footer {
   height: 160px;
   object-fit: cover;
 }
+.desserts-cat img {
+  width: 200px;
+  height: 160px;
+  object-fit: cover;
+}
 
 .category h3 {
   padding: 15px;
