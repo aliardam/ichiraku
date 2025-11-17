@@ -19,6 +19,22 @@ async function fetchItemsByCategory(categoryName) {
     return [];
   }
 }
+const itemImages = {
+  Edamame: "edamame.jpg",
+  Gyoza: "gyoza.jpeg",
+  "Agedashi Tofu": "tofu.jpg",
+  "Chicken Teriyaki": "ChickenTeriyaki.jpg",
+  "Salmon Donburi": "salmon-donburi.jpg",
+  Ramen: "ramen.jpg",
+  "Mochi Ice Cream": "mochi.jpg",
+  "Matcha Cheesecake": "matcha-cheesecake.jpg",
+  Dorayaki: "dorayaki.jpg",
+  "Green Tea": "green-tea.jpg",
+  Ramune: "ramune.jpg",
+  "Matcha Latte": "matcha-Latte.jpg",
+  "California Roll": "california-roll.jpg",
+  "Vegetable Sushi Roll": "veg_sushi.jpg",
+};
 
 categories.forEach((cat) => {
   cat.addEventListener("click", async () => {
@@ -50,16 +66,16 @@ async function showItems(categoryName) {
     const div = document.createElement("div");
     div.classList.add("item");
 
-    const imageName = item.name.toLowerCase().replace(/ /g, "") + ".jpg";
-    const imagePath = `${API_BASE_URL}/static/assets/${imageName}`;
+    const imageFile = itemImages[item.name] || "placeholder.png";
+    const imagePath = `${API_BASE_URL}/static/assets/${imageFile}`;
 
     div.innerHTML = `
-            <img src="${imagePath}" alt="${item.name}" 
-                 onerror="this.src='${API_BASE_URL}/static/assets/placeholder.jpg'">
-            <h4>${item.name}</h4>
-            <p>${item.description}</p>
-            <strong>$${item.price.toFixed(2)}</strong>
-        `;
+      <img src="${imagePath}" alt="${item.name}">
+      <h4>${item.name}</h4>
+      <p>${item.description}</p>
+      <strong>$${item.price.toFixed(2)}</strong>
+  `;
+
     itemList.appendChild(div);
   });
 
