@@ -88,7 +88,7 @@ def register():
     if not name or not password or (not email and not phone):
         return jsonify({'error': 'Name, password, and at least email or phone are required.'}), 400
 
-    hashed_password = generate_password_hash(password, method='sha256')
+    hashed_password = generate_password_hash(password)
 
     new_user = Users(
         name=name,

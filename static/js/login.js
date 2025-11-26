@@ -1,11 +1,11 @@
 const toggleFormLink = document.getElementById("toggleForm");
 const formTitle = document.getElementById("formTitle");
 const formSubtitle = document.getElementById("formSubtitle");
-const registerFields = document.getElementById("registerFields");
 const submitBtn = document.getElementById("submitBtn");
 const messageEl = document.getElementById("message");
 let isLogin = true;
 
+// Toggle Login / Register
 toggleFormLink.addEventListener("click", (e) => {
   e.preventDefault();
   isLogin = !isLogin;
@@ -31,14 +31,16 @@ toggleFormLink.addEventListener("click", (e) => {
   messageEl.textContent = "";
 });
 
+// Form submit handler
 document.getElementById("authForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const identifier = document.getElementById("identifier").value.trim();
   const password = document.getElementById("password").value.trim();
-  const confirmPassword = document
-    .getElementById("confirmPassword")
-    ?.value.trim();
+  
+  const confirmPassword = document.getElementById("confirmPassword")
+    ? document.getElementById("confirmPassword").value.trim()
+    : null;
 
   messageEl.style.color = "black";
   messageEl.textContent = isLogin ? "Logging in..." : "Registering...";
@@ -56,12 +58,13 @@ document.getElementById("authForm").addEventListener("submit", async (e) => {
       const name = document.getElementById("name").value.trim();
       const address = document.getElementById("address").value.trim();
 
+      // Use identifier as email for registration
       payload = {
         name,
         address,
-        identifier,
-        password,
-        confirmPassword,
+        email: identifier,
+        phone: "",
+        password
       };
     }
 
