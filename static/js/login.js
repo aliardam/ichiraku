@@ -13,13 +13,17 @@ toggleFormLink.addEventListener("click", (e) => {
   if (isLogin) {
     formTitle.textContent = "Login";
     formSubtitle.textContent = "Welcome back! Please sign in.";
-    registerFields.style.display = "none";
+    document.querySelectorAll(".register-only").forEach((el) => {
+      el.style.display = "none";
+    });
     submitBtn.textContent = "Login";
     toggleFormLink.textContent = "Register here";
   } else {
     formTitle.textContent = "Register";
     formSubtitle.textContent = "Create an account to get started.";
-    registerFields.style.display = "block";
+    document.querySelectorAll(".register-only").forEach((el) => {
+      el.style.display = "block";
+    });
     submitBtn.textContent = "Register";
     toggleFormLink.textContent = "Login here";
   }
@@ -44,9 +48,22 @@ document.getElementById("authForm").addEventListener("submit", async (e) => {
       ? "http://127.0.0.1:5000/api/login"
       : "http://127.0.0.1:5000/api/register";
 
-    const payload = { identifier, password };
+    let payload;
 
-    if (!isLogin) payload.confirmPassword = confirmPassword;
+    if (isLogin) {
+      payload = { identifier, password };
+    } else {
+      const name = document.getElementById("name").value.trim();
+      const address = document.getElementById("address").value.trim();
+
+      payload = {
+        name,
+        address,
+        identifier,
+        password,
+        confirmPassword,
+      };
+    }
 
     const res = await fetch(endpoint, {
       method: "POST",

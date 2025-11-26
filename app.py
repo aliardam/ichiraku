@@ -9,6 +9,8 @@ from flask_bcrypt import Bcrypt
 import urllib.parse
 from flask_cors import CORS
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
 CORS(app)
@@ -73,7 +75,6 @@ class LoginForm(FlaskForm):
 def index():
     return render_template('index.html')
 
-
 # Registration endpoint
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -105,16 +106,6 @@ def register():
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
     
-@app.route('/login', methods=['POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = Users.query.filter_by(name=form.name.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            return "Login successful!"
-        else:
-            return "Invalid username or password"
-    return render_template('login.html', form=form)
 
 @app.route('/menu')
 def menu():
@@ -123,6 +114,34 @@ def menu():
 @app.route('/login')
 def login_page():
     return render_template('login.html')
+
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    data = request.get_json()
+
+    identifier = data.get('identifier')
+    password = data.get('password')
+
+    if not identifier or not password:
+        return jsonify({'error': 'Identifier and password required'}), 400
+
+    # Login using email or phone
+    user = Users.query.filter(
+        (Users.email == identifier) | (Users.phone == identifier)
+    ).first()
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    if not check_password_hash(user.password, password):
+        return jsonify({'error': 'Incorrect password'}), 401
+
+    # Example admin check
+    if user.email == "admin@restaurant.com":
+        return jsonify({'message': 'Admin login', 'role': 'admin'})
+
+    return jsonify({'message': 'User login', 'role': 'user'})
+
 
 @app.route('/api/menu', methods=['GET', 'POST'])
 def get_menu():
