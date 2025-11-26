@@ -29,10 +29,12 @@ bcrypt = Bcrypt(app)
 class Users(db.Model, UserMixin):
     __tablename__ = 'Users'
 
-    user_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False, unique=True)
+    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=True)
+    phone = db.Column(db.String(20), unique=True, nullable=True)
+    address = db.Column(db.String(255), nullable=True)
     password = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(100), nullable=False, unique=True)
 
 class Category(db.Model):
     __tablename__ = 'Categories'
@@ -71,7 +73,39 @@ class LoginForm(FlaskForm):
 def index():
     return render_template('index.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+
+# Registration endpoint
+@app.route('/api/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+    phone = data.get('phone')
+    password = data.get('password')
+    address = data.get('address')
+
+    if not name or not password or (not email and not phone):
+        return jsonify({'error': 'Name, password, and at least email or phone are required.'}), 400
+
+    hashed_password = generate_password_hash(password, method='sha256')
+
+    new_user = Users(
+        name=name,
+        email=email,
+        phone=phone,
+        address=address,
+        password=hashed_password
+    )
+
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({'message': 'User registered successfully!'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+    
+@app.route('/login', methods=['POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -85,6 +119,10 @@ def login():
 @app.route('/menu')
 def menu():
     return render_template('menu.html')
+
+@app.route('/login')
+def login_page():
+    return render_template('login.html')
 
 @app.route('/api/menu', methods=['GET', 'POST'])
 def get_menu():

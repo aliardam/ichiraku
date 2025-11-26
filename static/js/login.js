@@ -40,7 +40,10 @@ document.getElementById("authForm").addEventListener("submit", async (e) => {
   messageEl.textContent = isLogin ? "Logging in..." : "Registering...";
 
   try {
-    const endpoint = isLogin ? "/login" : "/register";
+    const endpoint = isLogin
+      ? "http://127.0.0.1:5000/api/login"
+      : "http://127.0.0.1:5000/api/register";
+
     const payload = { identifier, password };
 
     if (!isLogin) payload.confirmPassword = confirmPassword;

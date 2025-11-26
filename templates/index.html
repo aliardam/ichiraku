@@ -13,7 +13,7 @@
 <body>
   <header>
     <!-- Logo (replace src with assets/logo.png if you add a file) -->
-    <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Ichiraku logo" id="logo" />
+    <img src="{{ url_for('static', filename='assets/logo.jpeg') }}" alt="Ichiraku logo" id="logo" />
     <nav>
       <a href="{{url_for('index')}}">Home</a> | <a href="{{url_for('menu', filename='templates/menu.html')}}">Menu</a> |
       <a href="{{ url_for('login') }}">Login</a>
