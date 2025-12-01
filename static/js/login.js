@@ -37,7 +37,7 @@ document.getElementById("authForm").addEventListener("submit", async (e) => {
 
   const identifier = document.getElementById("identifier").value.trim();
   const password = document.getElementById("password").value.trim();
-  
+
   const confirmPassword = document.getElementById("confirmPassword")
     ? document.getElementById("confirmPassword").value.trim()
     : null;
@@ -64,7 +64,7 @@ document.getElementById("authForm").addEventListener("submit", async (e) => {
         address,
         email: identifier,
         phone: "",
-        password
+        password,
       };
     }
 
@@ -75,16 +75,23 @@ document.getElementById("authForm").addEventListener("submit", async (e) => {
     });
 
     const data = await res.json();
-
     if (res.ok) {
       messageEl.style.color = "green";
       messageEl.textContent = isLogin
         ? "Login successful!"
         : "Registration successful!";
-      setTimeout(() => (window.location.href = "/menu"), 1000);
-    } else {
-      messageEl.style.color = "red";
-      messageEl.textContent = data.error || "Something went wrong.";
+
+      // Store user in localStorage
+      localStorage.setItem("user", JSON.stringify(data.user));
+      if (isLogin) {
+        console.log("Role returned by backend:", data.role);
+        localStorage.setItem("role", data.role); // SAVE ROLE
+        if (data.role === "admin") {
+          setTimeout(() => (window.location.href = "/admin"), 800);
+        } else {
+          setTimeout(() => (window.location.href = "/menu"), 800);
+        }
+      }
     }
   } catch (err) {
     messageEl.style.color = "red";

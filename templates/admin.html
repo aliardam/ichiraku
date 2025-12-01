@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="/static/css/admin.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>Admin Dashboard</h1>
+      <button id="logoutBtn">Logout</button>
+    </header>
+
+    <main>
+      <section class="card" onclick="location.href='/admin/orders'">
+        <h2>Manage Orders</h2>
+        <p>View, update, or delete customer orders.</p>
+      </section>
+
+      <section class="card" onclick="location.href='/admin/products'">
+        <h2>Manage Products</h2>
+        <p>Add or edit menu items.</p>
+      </section>
+
+      <section class="card" onclick="location.href='/admin/users'">
+        <h2>Manage Users</h2>
+        <p>View all registered users.</p>
+      </section>
+    </main>
+
+    <script src="/static/js/admin.js"></script>
+  </body>
+</html>

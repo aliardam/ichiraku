@@ -37,6 +37,7 @@ class Users(db.Model, UserMixin):
     phone = db.Column(db.String(20), unique=True, nullable=True)
     address = db.Column(db.String(255), nullable=True)
     password = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(20), nullable=False, default="user")  
 
 class Category(db.Model):
     __tablename__ = 'Categories'
@@ -115,10 +116,13 @@ def menu():
 def login_page():
     return render_template('login.html')
 
+@app.route('/admin')
+def admin_page():
+    return render_template('admin.html')
+
 @app.route('/api/login', methods=['POST'])
 def api_login():
     data = request.get_json()
-
     identifier = data.get('identifier')
     password = data.get('password')
 
@@ -136,11 +140,26 @@ def api_login():
     if not check_password_hash(user.password, password):
         return jsonify({'error': 'Incorrect password'}), 401
 
-    # Example admin check
-    if user.email == "admin@restaurant.com":
-        return jsonify({'message': 'Admin login', 'role': 'admin'})
+    # Build clean user object
+    user_data = {
+        'id': user.user_id,
+        'name': user.name,
+        'email': user.email
+    }
 
-    return jsonify({'message': 'User login', 'role': 'user'})
+    # Admin condition
+    if user.email == "aliardam402@gmail.com":
+        return jsonify({
+            'message': 'Admin login',
+            'role': 'admin',
+            'user': user_data
+        })
+
+    return jsonify({
+        'message': 'User login',
+        'role': 'user',
+        'user': user_data
+    })
 
 
 @app.route('/api/menu', methods=['GET', 'POST'])
@@ -217,3 +236,61 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
+
+# ---------- ADMIN ROUTES ----------
+
+@app.route('/api/admin/items', methods=['GET'])
+def admin_get_items():
+    items = MenuItem.query.all()
+    return jsonify([
+        {
+            "id": item.item_id,
+            "name": item.name,
+            "description": item.description,
+            "price": float(item.price),
+            "category": item.category.name
+        }
+        for item in items
+    ])
+
+@app.route('/api/admin/add_item', methods=['POST'])
+def admin_add_item():
+    data = request.get_json()
+
+    new_item = MenuItem(
+        name=data['name'],
+        description=data['description'],
+        price=data['price'],
+        category_id=data['category_id'],
+        is_drink=data.get('is_drink', False)
+    )
+
+    db.session.add(new_item)
+    db.session.commit()
+    return jsonify({"message": "Item added successfully"})
+
+@app.route('/api/admin/edit_item/<int:item_id>', methods=['PUT'])
+def admin_edit_item(item_id):
+    item = MenuItem.query.get(item_id)
+    if not item:
+        return jsonify({"error": "Item not found"}), 404
+
+    data = request.get_json()
+    item.name = data['name']
+    item.description = data['description']
+    item.price = data['price']
+    item.category_id = data['category_id']
+    item.is_drink = data.get('is_drink', item.is_drink)
+
+    db.session.commit()
+    return jsonify({"message": "Item updated"})
+
+@app.route('/api/admin/delete_item/<int:item_id>', methods=['DELETE'])
+def admin_delete_item(item_id):
+    item = MenuItem.query.get(item_id)
+    if not item:
+        return jsonify({"error": "Item not found"}), 404
+
+    db.session.delete(item)
+    db.session.commit()
+    return jsonify({"message": "Item deleted"})
