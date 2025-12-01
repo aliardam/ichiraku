@@ -270,7 +270,7 @@ footer {
 #back-btn:hover {
   background-color: #d35400;
 }
-/* ========== LOGIN PAGE STYLES ========== */
+
 /* ========== LOGIN PAGE STYLES ========== */
 body.auth-page {
   display: flex;
@@ -363,4 +363,26 @@ button:hover {
 #message {
   margin-top: 1rem;
   color: #ff4d4d;
+}
+/* admin page  */
+.admin-section {
+  padding: 20px;
+}
+
+.admin-section input,
+.admin-section select {
+  display: block;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
 }

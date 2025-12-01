@@ -1,36 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard</title>
-
-    <link rel="stylesheet" href="/static/css/admin.css" />
+    <meta charset="utf-8" />
+    <title>Admin — Manage Menu Items</title>
+    <!-- use the CSS you already have -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    <style>
+      /* small admin-specific tweaks so it's usable without changing main CSS */
+      .admin-wrap {
+        padding: 24px;
+        max-width: 1100px;
+        margin: 20px auto;
+      }
+      .admin-grid {
+        display: grid;
+        grid-template-columns: 1fr 420px;
+        gap: 24px;
+        align-items: start;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 16px;
+        border-radius: 10px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+      }
+      label {
+        display: block;
+        margin-top: 8px;
+        font-weight: 600;
+        color: #ddd;
+      }
+      input[type="text"],
+      input[type="number"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #444;
+        background: #121212;
+        color: #fff;
+        margin-top: 6px;
+      }
+      button {
+        background: #e67e22;
+        color: white;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 12px;
+      }
+      .small-btn {
+        padding: 6px 8px;
+        margin-right: 6px;
+        border-radius: 6px;
+      }
+      .danger {
+        background: #c0392b;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+      }
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        text-align: left;
+        color: #eee;
+      }
+      td .meta {
+        color: #bbb;
+        font-size: 0.9rem;
+      }
+      .msg {
+        margin-top: 8px;
+        color: #ffb86b;
+        font-weight: 600;
+      }
+      .inline-flex {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .checkbox-inline {
+        display: inline-block;
+        margin-left: 8px;
+        color: #ccc;
+      }
+    </style>
   </head>
-
   <body>
-    <header>
-      <h1>Admin Dashboard</h1>
-      <button id="logoutBtn">Logout</button>
-    </header>
+    <div class="admin-wrap">
+      <h1>Admin — Manage Menu Items</h1>
 
-    <main>
-      <section class="card" onclick="location.href='/admin/orders'">
-        <h2>Manage Orders</h2>
-        <p>View, update, or delete customer orders.</p>
-      </section>
+      <div class="admin-grid">
+        <!-- LEFT: items list -->
+        <div class="card">
+          <h2>Existing Items</h2>
+          <div id="items-container">
+            <p>Loading items…</p>
+          </div>
+        </div>
 
-      <section class="card" onclick="location.href='/admin/products'">
-        <h2>Manage Products</h2>
-        <p>Add or edit menu items.</p>
-      </section>
+        <!-- RIGHT: add / edit form -->
+        <div class="card">
+          <h2 id="form-title">Add New Item</h2>
 
-      <section class="card" onclick="location.href='/admin/users'">
-        <h2>Manage Users</h2>
-        <p>View all registered users.</p>
-      </section>
-    </main>
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="E.g. Salmon Donburi" />
 
-    <script src="/static/js/admin.js"></script>
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            rows="4"
+            placeholder="Short description"
+          ></textarea>
+
+          <label for="price">Price (USD)</label>
+          <input id="price" type="number" step="0.01" placeholder="12.50" />
+
+          <label for="category">Category</label>
+          <select id="category"></select>
+
+          <div class="inline-flex">
+            <label class="checkbox-inline">
+              <input id="is_drink" type="checkbox" /> Is drink
+            </label>
+          </div>
+
+          <div>
+            <button id="submit-btn">Add Item</button>
+            <button
+              id="cancel-edit"
+              style="
+                background: #777;
+                color: white;
+                display: none;
+                margin-left: 8px;
+              "
+            >
+              Cancel edit
+            </button>
+          </div>
+
+          <div id="form-msg" class="msg" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
   </body>
 </html>

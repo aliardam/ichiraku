@@ -73,8 +73,12 @@ class LoginForm(FlaskForm):
 
 # ---------- ROUTES ----------
 @app.route('/')
-def index():
+def home():
     return render_template('index.html')
+
+@app.route('/admin/products')
+def admin_products_page():
+    return render_template('admin.html')
 
 # Registration endpoint
 @app.route('/api/register', methods=['POST'])
@@ -185,6 +189,7 @@ def get_menu():
 
     return jsonify(menu)
 
+
 @app.route('/api/categories')
 def get_categories():
     categories = Category.query.all()
@@ -230,14 +235,8 @@ def get_menu_by_category(category_name):
 def serve_static(filename):
     return send_from_directory('static/assets', filename)
 
-
-# ---------- RUN APP ----------
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
-
 # ---------- ADMIN ROUTES ----------
+
 
 @app.route('/api/admin/items', methods=['GET'])
 def admin_get_items():
@@ -294,3 +293,8 @@ def admin_delete_item(item_id):
     db.session.delete(item)
     db.session.commit()
     return jsonify({"message": "Item deleted"})
+# ---------- RUN APP ----------
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)
