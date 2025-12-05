@@ -65,9 +65,15 @@ async function showItems(categoryName) {
   items.forEach((item) => {
     const div = document.createElement("div");
     div.classList.add("item");
-
+    div.dataset.id = item.id;
+    div.dataset.name = item.name;
+    div.dataset.description = item.description;
+    div.dataset.ingredients = item.ingredients || "No ingredients listed";
+    div.dataset.price = item.price;
     const imageFile = itemImages[item.name] || "placeholder.png";
     const imagePath = `${API_BASE_URL}/static/assets/${imageFile}`;
+
+    div.dataset.img = imagePath;
 
     div.innerHTML = `
       <img src="${imagePath}" alt="${item.name}">
@@ -82,3 +88,59 @@ async function showItems(categoryName) {
   categoriesSection.classList.add("hidden");
   itemsSection.classList.remove("hidden");
 }
+// Open item popup
+document.addEventListener("click", function (e) {
+  const item = e.target.closest(".item");
+  if (!item) return;
+
+  document.getElementById("detail-name").textContent = item.dataset.name;
+  document.getElementById("detail-description").textContent =
+    "Description: " + item.dataset.description;
+  document.getElementById("detail-ingredients").textContent =
+    "Ingredients: " + item.dataset.ingredients;
+  document.getElementById("detail-price").textContent =
+    "Price: $" + parseFloat(item.dataset.price).toFixed(2);
+
+  document.getElementById("detail-img").src = item.dataset.img;
+
+  // store id for later ordering
+  document
+    .getElementById("add-to-order-btn")
+    .setAttribute("data-id", item.dataset.id);
+
+  document.getElementById("item-detail-overlay").classList.remove("hidden");
+});
+
+// Close popup
+document.getElementById("close-detail-btn").addEventListener("click", () => {
+  document.getElementById("item-detail-overlay").classList.add("hidden");
+});
+// Add item to order
+document.getElementById("add-to-order-btn").addEventListener("click", () => {
+  const itemId = event.target.getAttribute("data-id");
+
+  const orderItem = {
+    id: itemId,
+    name: document.getElementById("detail-name").textContent,
+    description: document
+      .getElementById("detail-description")
+      .textContent.replace("Description: ", ""),
+    ingredients: document
+      .getElementById("detail-ingredients")
+      .textContent.replace("Ingredients: ", ""),
+    price: parseFloat(
+      document
+        .getElementById("detail-price")
+        .textContent.replace("Price: $", "")
+    ),
+    img: document.getElementById("detail-img").src,
+  };
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push(orderItem);
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  alert("Item added to your order!");
+
+  document.getElementById("item-detail-overlay").classList.add("hidden");
+});

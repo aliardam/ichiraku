@@ -9,6 +9,13 @@
     />
   </head>
   <body>
+    <a id="order-btn" href="/order">
+      <img
+        src="{{ url_for('static', filename='assets/order.png') }}"
+        alt="My Order"
+      />
+    </a>
+
     <header>
       <h1>Our Menu</h1>
     </header>
@@ -55,6 +62,19 @@
         <h2 id="category-title"></h2>
         <div class="item-grid" id="item-list">
           <!-- Items will appear here -->
+        </div>
+        <!-- Item Detail Popup -->
+        <div id="item-detail-overlay" class="hidden">
+          <div id="item-detail-box">
+            <img id="detail-img" src="" alt="Item Image" />
+            <h2 id="detail-name"></h2>
+            <p id="detail-description"></p>
+            <p id="detail-ingredients"></p>
+            <p id="detail-price"></p>
+
+            <button id="add-to-order-btn">Add to Order</button>
+            <button id="close-detail-btn">Close</button>
+          </div>
         </div>
       </section>
     </main>

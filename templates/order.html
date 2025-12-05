@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Order</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>My Order</h1>
+    </header>
+
+    <main id="order-container">
+      <div id="order-list">
+        <!-- Items will be loaded here -->
+      </div>
+
+      <div id="order-summary">
+        <h2>Total: <span id="total-price">$0.00</span></h2>
+        <button id="clear-order-btn">Clear Order</button>
+      </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/order.js') }}"></script>
+  </body>
+</html>

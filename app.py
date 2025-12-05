@@ -235,6 +235,10 @@ def get_menu_by_category(category_name):
 def serve_static(filename):
     return send_from_directory('static/assets', filename)
 
+@app.route('/order')
+def order_page():
+    return render_template('order.html')
+
 # ---------- ADMIN ROUTES ----------
 
 

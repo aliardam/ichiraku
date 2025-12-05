@@ -271,6 +271,89 @@ footer {
   background-color: #d35400;
 }
 
+#item-detail-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+#item-detail-overlay.hidden {
+  display: none;
+}
+
+#item-detail-box {
+  background: rgba(24, 23, 23, 0.79);
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+#item-detail-box img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+#item-detail-box button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#close-detail-btn {
+  background: #ccc;
+}
+
+#add-to-order-btn {
+  background: #ff9800;
+  color: white;
+}
+#order-btn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: #ffffffde; /* light background so black icon is visible */
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+#order-btn:hover {
+  background: white;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+#order-btn img {
+  width: 35px;
+  height: 35px;
+  display: block;
+}
+.order-item img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
 /* ========== LOGIN PAGE STYLES ========== */
 body.auth-page {
   display: flex;

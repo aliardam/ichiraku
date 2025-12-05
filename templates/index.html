@@ -8,12 +8,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Ichiraku — Home</title>
-    <!-- optional later -->
   </head>
 
   <body>
     <header>
-      <!-- Logo (replace src with assets/logo.png if you add a file) -->
       <img
         src="{{ url_for('static', filename='assets/logo.jpeg') }}"
         alt="Ichiraku logo"
@@ -52,7 +50,6 @@
     <footer>
       <p>&copy; Ichiraku <span id="year"></span></p>
       <script>
-        // small JS to set the current year (optional)
         document.getElementById("year").textContent = new Date().getFullYear();
       </script>
     </footer>
