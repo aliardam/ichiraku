@@ -10,7 +10,7 @@ import urllib.parse
 from flask_cors import CORS
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 CORS(app)
@@ -26,7 +26,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:Root%40123@localho
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
-
+migrate = Migrate(app, db)
 # ---------- MODELS ----------
 class Users(db.Model, UserMixin):
     __tablename__ = 'Users'
@@ -87,6 +87,8 @@ def register():
     name = data.get('name')
     email = data.get('email')
     phone = data.get('phone')
+    if not phone:
+        phone = None
     password = data.get('password')
     address = data.get('address')
 
