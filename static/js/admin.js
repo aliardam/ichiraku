@@ -6,7 +6,6 @@ const nameEl = document.getElementById("name");
 const descEl = document.getElementById("description");
 const priceEl = document.getElementById("price");
 const categoryEl = document.getElementById("category");
-const isDrinkEl = document.getElementById("is_drink");
 const submitBtn = document.getElementById("submit-btn");
 const cancelBtn = document.getElementById("cancel-edit");
 const msgEl = document.getElementById("form-msg");
@@ -71,7 +70,7 @@ async function loadItems() {
   table.innerHTML = `
     <thead>
       <tr>
-        <th>ID</th><th>Name</th><th>Desc</th><th>Price</th><th>Category</th><th>Drink?</th><th>Actions</th>
+        <th>ID</th><th>Name</th><th>Desc</th><th>Price</th><th>Category</th><th>Actions</th>
       </tr>
     </thead>
   `;
@@ -85,7 +84,6 @@ async function loadItems() {
       <td class="meta">${escapeHtml(it.description || "")}</td>
       <td class="meta">${Number(it.price).toFixed(2)}</td>
       <td class="meta">${escapeHtml(it.category || "")}</td>
-      <td class="meta">${it.is_drink ? "Yes" : "No"}</td>
       <td>
         <button class="small-btn" data-id="${
           it.id
@@ -139,10 +137,6 @@ function startEdit(id, items) {
   nameEl.value = it.name || "";
   descEl.value = it.description || "";
   priceEl.value = Number(it.price).toFixed(2) || "";
-  isDrinkEl.checked = !!it.is_drink;
-
-  // try to select category by name: the categories list contains ids, but admin_get_items returns category name
-  // so we'll try to pick the matching category option by name first
   let found = false;
   [...categoryEl.options].forEach((opt) => {
     if (opt.textContent.toLowerCase() === (it.category || "").toLowerCase()) {
@@ -168,7 +162,6 @@ function resetForm() {
   nameEl.value = "";
   descEl.value = "";
   priceEl.value = "";
-  isDrinkEl.checked = false;
   if (categoryEl.options.length) categoryEl.selectedIndex = 0;
   formTitle.textContent = "Add New Item";
   submitBtn.textContent = "Add Item";
@@ -183,7 +176,6 @@ submitBtn.addEventListener("click", async (e) => {
   const description = descEl.value.trim();
   const price = parseFloat(priceEl.value);
   const category_id = parseInt(categoryEl.value);
-  const is_drink = isDrinkEl.checked;
 
   if (!name || !description || Number.isNaN(price) || !category_id) {
     showMsg("Please fill name, description, price and category", "#f66");
@@ -192,7 +184,7 @@ submitBtn.addEventListener("click", async (e) => {
 
   if (editingId) {
     // PUT to edit
-    const body = { name, description, price, category_id, is_drink };
+    const body = { name, description, price, category_id };
     const r = await safeFetch(`/api/admin/edit_item/${editingId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -207,7 +199,7 @@ submitBtn.addEventListener("click", async (e) => {
     await loadItems();
   } else {
     // POST to add
-    const body = { name, description, price, category_id, is_drink };
+    const body = { name, description, price, category_id};
     const r = await safeFetch("/api/admin/add_item", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
