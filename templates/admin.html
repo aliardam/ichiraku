@@ -3,13 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <title>Admin — Manage Menu Items</title>
-    <!-- use the CSS you already have -->
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/styles.css') }}"
     />
     <style>
-      /* small admin-specific tweaks so it's usable without changing main CSS */
+      /* Keeping your original Admin CSS */
       .admin-wrap {
         padding: 24px;
         max-width: 1100px;
@@ -44,6 +43,11 @@
         background: #121212;
         color: #fff;
         margin-top: 6px;
+      }
+      /* New Style for File Input */
+      input[type="file"] {
+        margin-top: 6px;
+        color: #ccc;
       }
       button {
         background: #e67e22;
@@ -93,6 +97,14 @@
         margin-left: 8px;
         color: #ccc;
       }
+      /* Image Preview Style */
+      .thumb-img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid #555;
+      }
     </style>
   </head>
   <body>
@@ -100,48 +112,81 @@
       <h1>Admin — Manage Menu Items</h1>
 
       <div class="admin-grid">
-        <!-- LEFT: items list -->
         <div class="card">
           <h2>Existing Items</h2>
           <div id="items-container">
-            <p>Loading items…</p>
+            <table>
+              <thead>
+                <tr>
+                  <th width="60">Img</th>
+                  <th>Details</th>
+                  <th width="120">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="items-table-body"></tbody>
+            </table>
           </div>
         </div>
 
-        <!-- RIGHT: add / edit form -->
         <div class="card">
           <h2 id="form-title">Add New Item</h2>
 
-          <label for="name">Name</label>
-          <input id="name" type="text" placeholder="E.g. Salmon Donburi" />
+          <form id="item-form" onsubmit="return false;">
+            <input type="hidden" id="edit-id" value="" />
 
-          <label for="description">Description</label>
-          <textarea
-            id="description"
-            rows="4"
-            placeholder="Short description"
-          ></textarea>
+            <label for="name">Name</label>
+            <input
+              id="name"
+              type="text"
+              placeholder="E.g. Salmon Donburi"
+              required
+            />
 
-          <label for="price">Price (USD)</label>
-          <input id="price" type="number" step="0.01" placeholder="12.50" />
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              rows="4"
+              placeholder="Short description"
+              required
+            ></textarea>
 
-          <label for="category">Category</label>
-          <select id="category"></select>
+            <label for="price">Price (USD)</label>
+            <input
+              id="price"
+              type="number"
+              step="0.01"
+              placeholder="12.50"
+              required
+            />
 
-          <div>
-            <button id="submit-btn">Add Item</button>
-            <button
-              id="cancel-edit"
-              style="
-                background: #777;
-                color: white;
-                display: none;
-                margin-left: 8px;
-              "
-            >
-              Cancel edit
-            </button>
-          </div>
+            <label for="category_id">Category</label>
+            <select id="category_id"></select>
+
+            <label for="image">Item Image</label>
+            <input type="file" id="image" accept="image/*" />
+
+            <div class="inline-flex" style="margin-top: 10px">
+              <label class="checkbox-inline">
+                <input id="is_drink" type="checkbox" /> Is drink
+              </label>
+            </div>
+
+            <div>
+              <button type="submit" id="submit-btn">Add Item</button>
+              <button
+                type="button"
+                id="cancel-edit"
+                style="
+                  background: #777;
+                  color: white;
+                  display: none;
+                  margin-left: 8px;
+                "
+              >
+                Cancel edit
+              </button>
+            </div>
+          </form>
 
           <div id="form-msg" class="msg" aria-live="polite"></div>
         </div>
