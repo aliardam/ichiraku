@@ -5,9 +5,9 @@ const backBtn = document.getElementById("back-btn");
 const categoryTitle = document.getElementById("category-title");
 const itemList = document.getElementById("item-list");
 
-const API_BASE_URL = "http://localhost:5000"; // adjust if needed
+const API_BASE_URL = "http://localhost:5000"; 
 
-// Fetch items by category from backend
+// 1. Fetch items by category from backend
 async function fetchItemsByCategory(categoryName) {
   try {
     const response = await fetch(`${API_BASE_URL}/api/menu/${categoryName}`);
@@ -19,23 +19,8 @@ async function fetchItemsByCategory(categoryName) {
     return [];
   }
 }
-const itemImages = {
-  Edamame: "edamame.jpg",
-  Gyoza: "gyoza.jpeg",
-  "Agedashi Tofu": "tofu.jpg",
-  "Chicken Teriyaki": "ChickenTeriyaki.jpg",
-  "Salmon Donburi": "salmon-donburi.jpg",
-  Ramen: "ramen.jpg",
-  "Mochi Ice Cream": "mochi.jpg",
-  "Matcha Cheesecake": "matcha-cheesecake.jpg",
-  Dorayaki: "dorayaki.jpg",
-  "Green Tea": "green-tea.jpg",
-  Ramune: "ramune.jpg",
-  "Matcha Latte": "matcha-Latte.jpg",
-  "California Roll": "california-roll.jpg",
-  "Vegetable Sushi Roll": "veg_sushi.jpg",
-};
 
+// 2. Handle Category Clicks
 categories.forEach((cat) => {
   cat.addEventListener("click", async () => {
     const category = cat.dataset.category;
@@ -43,11 +28,13 @@ categories.forEach((cat) => {
   });
 });
 
+// 3. Handle Back Button
 backBtn.addEventListener("click", () => {
   itemsSection.classList.add("hidden");
   categoriesSection.classList.remove("hidden");
 });
 
+// 4. Show Items Function (Updated for DB Images)
 async function showItems(categoryName) {
   itemList.innerHTML = "<p>Loading...</p>";
   categoryTitle.textContent =
@@ -65,13 +52,23 @@ async function showItems(categoryName) {
   items.forEach((item) => {
     const div = document.createElement("div");
     div.classList.add("item");
+    
+    // Store data for the popup
     div.dataset.id = item.id;
     div.dataset.name = item.name;
     div.dataset.description = item.description;
-    div.dataset.ingredients = item.ingredients || "No ingredients listed";
     div.dataset.price = item.price;
-    const imageFile = itemImages[item.name] || "placeholder.png";
-    const imagePath = `${API_BASE_URL}/static/assets/${imageFile}`;
+    
+    // --- KEY CHANGE: Dynamic Images from Database ---
+    // If backend sends an image link, use it. Otherwise, use placeholder.
+    // Note: The backend sends the link as "/api/images/filename.jpg"
+    let imagePath;
+    if (item.image) {
+        imagePath = `${API_BASE_URL}${item.image}`;
+    } else {
+        // Fallback to local placeholder
+        imagePath = `${API_BASE_URL}/static/assets/placeholder.png`; 
+    }
 
     div.dataset.img = imagePath;
 
@@ -80,7 +77,7 @@ async function showItems(categoryName) {
       <h4>${item.name}</h4>
       <p>${item.description}</p>
       <strong>$${item.price.toFixed(2)}</strong>
-  `;
+    `;
 
     itemList.appendChild(div);
   });
@@ -88,54 +85,58 @@ async function showItems(categoryName) {
   categoriesSection.classList.add("hidden");
   itemsSection.classList.remove("hidden");
 }
-// Open item popup
+
+// 5. Open Item Popup
 document.addEventListener("click", function (e) {
   const item = e.target.closest(".item");
   if (!item) return;
 
   document.getElementById("detail-name").textContent = item.dataset.name;
-  document.getElementById("detail-description").textContent =
-    "Description: " + item.dataset.description;
-  document.getElementById("detail-ingredients").textContent =
-    "Ingredients: " + item.dataset.ingredients;
-  document.getElementById("detail-price").textContent =
-    "Price: $" + parseFloat(item.dataset.price).toFixed(2);
+  
+  // Handle description check
+  const desc = item.dataset.description && item.dataset.description !== "undefined" 
+    ? item.dataset.description 
+    : "No description available";
+    
+  document.getElementById("detail-description").textContent = "Description: " + desc;
+  
+  // Note: We removed ingredients since it wasn't in your updated DB model, 
+  // but you can add it back if you add a column for it.
+  const ingElement = document.getElementById("detail-ingredients");
+  if(ingElement) ingElement.textContent = ""; 
 
+  document.getElementById("detail-price").textContent = "Price: $" + parseFloat(item.dataset.price).toFixed(2);
   document.getElementById("detail-img").src = item.dataset.img;
 
-  // store id for later ordering
-  document
-    .getElementById("add-to-order-btn")
-    .setAttribute("data-id", item.dataset.id);
+  // Store ID on the button for later ordering
+  document.getElementById("add-to-order-btn").setAttribute("data-id", item.dataset.id);
 
   document.getElementById("item-detail-overlay").classList.remove("hidden");
 });
 
-// Close popup
+// 6. Close Popup
 document.getElementById("close-detail-btn").addEventListener("click", () => {
   document.getElementById("item-detail-overlay").classList.add("hidden");
 });
-// Add item to order
-document.getElementById("add-to-order-btn").addEventListener("click", () => {
-  const itemId = event.target.getAttribute("data-id");
 
+// 7. Add Item to Order (Local Storage)
+document.getElementById("add-to-order-btn").addEventListener("click", () => {
+  const btn = document.getElementById("add-to-order-btn");
+  const itemId = btn.getAttribute("data-id");
+
+  // Create the cart item object
   const orderItem = {
-    id: itemId,
+    id: itemId, // Important for backend
     name: document.getElementById("detail-name").textContent,
-    description: document
-      .getElementById("detail-description")
-      .textContent.replace("Description: ", ""),
-    ingredients: document
-      .getElementById("detail-ingredients")
-      .textContent.replace("Ingredients: ", ""),
+    description: document.getElementById("detail-description").textContent.replace("Description: ", ""),
     price: parseFloat(
-      document
-        .getElementById("detail-price")
-        .textContent.replace("Price: $", "")
+      document.getElementById("detail-price").textContent.replace("Price: $", "")
     ),
     img: document.getElementById("detail-img").src,
+    quantity: 1
   };
 
+  // Save to LocalStorage
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   cart.push(orderItem);
   localStorage.setItem("cart", JSON.stringify(cart));
